@@ -1,0 +1,18 @@
+# CIEMS Git Ignore Configuration
+
+# Ignore uploaded binary forensic artifacts in vault (protect storage and sensitive dumps)
+storage/vault/*
+!storage/vault/.htaccess
+!storage/vault/.gitkeep
+
+# Ignore generated report exports
+storage/reports/*
+!storage/reports/.gitkeep
+
+# OS and Editor metadata
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.tmp
