@@ -45,20 +45,34 @@ require dirname(__DIR__) . '/layouts/header.php';
                     </div>
 
                     <div class="row g-3 mb-3">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="source_device" class="form-label small fw-semibold text-secondary">
                                 Origin Device / Seizure Location <span class="text-danger">*</span>
                             </label>
                             <input type="text" class="form-control" id="source_device" name="source_device" required
-                                placeholder="e.g. Workstation DESKTOP-HQ04 / Primary SSD NVMe">
+                                placeholder="e.g. Workstation DESKTOP-HQ04">
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="acquired_at" class="form-label small fw-semibold text-secondary">
-                                Acquisition / Seizure Timestamp <span class="text-danger">*</span>
+                                Acquisition Timestamp <span class="text-danger">*</span>
                             </label>
                             <input type="datetime-local" class="form-control" id="acquired_at" name="acquired_at" required
                                 value="<?= date('Y-m-d\TH:i') ?>">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="classification_level" class="form-label small fw-semibold text-secondary">
+                                Confidentiality / Clearance Level <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select" id="classification_level" name="classification_level" required>
+                                <option value="top_secret">🔴 Top Secret</option>
+                                <option value="secret">🟠 Secret</option>
+                                <option value="confidential" selected>🟡 Confidential</option>
+                                <option value="restricted">🔵 Restricted</option>
+                                <option value="unclassified">⚪ Unclassified</option>
+                            </select>
+                            <div class="form-text small">Mandated handling clearance level.</div>
                         </div>
                     </div>
 

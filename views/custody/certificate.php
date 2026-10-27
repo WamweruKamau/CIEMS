@@ -127,6 +127,10 @@
                     <td><?= number_format($evidence['file_size_bytes'] / 1024, 2) ?> KB</td>
                 </tr>
                 <tr>
+                    <th class="bg-light">Clearance Level:</th>
+                    <td><?= getClassificationBadge($evidence['classification_level'] ?? 'confidential') ?></td>
+                </tr>
+                <tr>
                     <th class="bg-light">Acquisition Time:</th>
                     <td><?= date('Y-m-d H:i:s', strtotime($evidence['acquired_at'])) ?></td>
                 </tr>

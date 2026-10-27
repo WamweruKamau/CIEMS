@@ -19,9 +19,10 @@ class EvidenceController {
 
     public function index(): void {
         $filters = [
-            'case_id' => $_GET['case_id'] ?? '',
-            'status'  => $_GET['status'] ?? '',
-            'search'  => $_GET['search'] ?? ''
+            'case_id'        => $_GET['case_id'] ?? '',
+            'status'         => $_GET['status'] ?? '',
+            'classification' => $_GET['classification'] ?? '',
+            'search'         => $_GET['search'] ?? ''
         ];
 
         $evidenceList = Evidence::getAll($filters);
@@ -94,6 +95,12 @@ class EvidenceController {
             $sourceDevice = trim($_POST['source_device'] ?? 'Unknown Source');
             $acquiredAt   = !empty($_POST['acquired_at']) ? $_POST['acquired_at'] : date('Y-m-d H:i:s');
             $description  = trim($_POST['description'] ?? '');
+            
+            $classificationLevel = $_POST['classification_level'] ?? 'confidential';
+            $validLevels = ['top_secret', 'secret', 'confidential', 'restricted', 'unclassified'];
+            if (!in_array($classificationLevel, $validLevels, true)) {
+                $classificationLevel = 'confidential';
+            }
 
             // Ensure vault directory exists
             if (!is_dir(VAULT_PATH)) {
@@ -131,9 +138,10 @@ class EvidenceController {
                 'acquired_at'       => $acquiredAt,
                 'sha256_hash'       => $sha256Hash,
                 'md5_hash'          => $md5Hash,
-                'description'       => $description,
-                'uploaded_by'       => Auth::id(),
-                'status'            => 'secured'
+                'description'          => $description,
+                'uploaded_by'          => Auth::id(),
+                'classification_level' => $classificationLevel,
+                'status'               => 'secured'
             ]);
 
             Session::setFlash('success', "Forensic artifact {$evidenceNumber} ingested successfully. SHA-256: {$sha256Hash}");

@@ -167,6 +167,73 @@ body {
     border: 1px solid #e2e8f0;
 }
 
+/* Security Classification / Confidence Level Badges (Forensic High-Contrast) */
+.badge-classification-top_secret {
+    background-color: #881337 !important;
+    color: #ffffff !important;
+    border: 1px solid #f43f5e !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    padding: 0.35rem 0.65rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2) !important;
+}
+.badge-classification-secret {
+    background-color: #c2410c !important;
+    color: #ffffff !important;
+    border: 1px solid #ea580c !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    padding: 0.35rem 0.65rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2) !important;
+}
+.badge-classification-confidential {
+    background-color: #d97706 !important;
+    color: #ffffff !important;
+    border: 1px solid #f59e0b !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    padding: 0.35rem 0.65rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2) !important;
+}
+.badge-classification-restricted {
+    background-color: #1d4ed8 !important;
+    color: #ffffff !important;
+    border: 1px solid #3b82f6 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    padding: 0.35rem 0.65rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2) !important;
+}
+.badge-classification-unclassified {
+    background-color: #475569 !important;
+    color: #ffffff !important;
+    border: 1px solid #64748b !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    padding: 0.35rem 0.65rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2) !important;
+}
+
 /* Monospace font for hashes */
 .font-monospace {
     font-family: 'JetBrains Mono', Consolas, monospace !important;

@@ -99,6 +99,7 @@ $role = Auth::role();
                         <tr>
                             <th class="ps-3">Evidence ID</th>
                             <th>Original Filename</th>
+                            <th>Clearance Level</th>
                             <th>Origin Device</th>
                             <th>Size</th>
                             <th>SHA-256 Checksum Fingerprint</th>
@@ -117,6 +118,9 @@ $role = Auth::role();
                                 <td>
                                     <div class="fw-semibold text-dark"><?= htmlspecialchars($ev['original_filename']) ?></div>
                                     <small class="text-muted font-monospace"><?= strtoupper(htmlspecialchars($ev['file_extension'])) ?> • <?= htmlspecialchars($ev['mime_type']) ?></small>
+                                </td>
+                                <td>
+                                    <?= getClassificationBadge($ev['classification_level'] ?? 'confidential') ?>
                                 </td>
                                 <td>
                                     <span class="small text-dark"><?= htmlspecialchars($ev['source_device']) ?></span>

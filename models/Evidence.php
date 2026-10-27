@@ -10,7 +10,33 @@ require_once __DIR__ . '/ChainOfCustody.php';
 require_once __DIR__ . '/AuditLog.php';
 
 class Evidence {
+    /**
+     * Self-healing schema validation: ensures classification_level column exists in MySQL.
+     */
+    public static function ensureClassificationColumn(): void {
+        static $checked = false;
+        if ($checked) return;
+        $checked = true;
+        try {
+            $pdo = Database::getConnection();
+            $stmt = $pdo->query("SHOW COLUMNS FROM `evidence` LIKE 'classification_level'");
+            if (!$stmt->fetch()) {
+                $pdo->exec("
+                    ALTER TABLE `evidence` 
+                    ADD COLUMN `classification_level` ENUM('top_secret', 'secret', 'confidential', 'restricted', 'unclassified') 
+                    NOT NULL DEFAULT 'confidential' 
+                    COMMENT 'Security classification clearance level' 
+                    AFTER `description`
+                ");
+                $pdo->exec("UPDATE `evidence` SET `classification_level` = 'secret' WHERE `evidence_number` = 'EVID-2026-001-A'");
+            }
+        } catch (\Throwable $e) {
+            // Silently allow if permissions or already altered
+        }
+    }
+
     public static function getAll(array $filters = []): array {
+        self::ensureClassificationColumn();
         $pdo = Database::getConnection();
         $sql = "
             SELECT e.*, c.case_number, c.title as case_title, u.full_name as uploader_name, u.badge_number as uploader_badge
@@ -28,6 +54,10 @@ class Evidence {
         if (!empty($filters['status'])) {
             $sql .= " AND e.status = ?";
             $params[] = $filters['status'];
+        }
+        if (!empty($filters['classification'])) {
+            $sql .= " AND e.classification_level = ?";
+            $params[] = $filters['classification'];
         }
         if (!empty($filters['search'])) {
             $sql .= " AND (e.evidence_number LIKE ? OR e.original_filename LIKE ? OR e.description LIKE ? OR e.sha256_hash LIKE ?)";
@@ -89,8 +119,8 @@ class Evidence {
             INSERT INTO evidence (
                 case_id, evidence_number, original_filename, stored_filename, file_path,
                 file_size_bytes, mime_type, file_extension, source_device, acquired_at,
-                sha256_hash, md5_hash, description, uploaded_by, status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                sha256_hash, md5_hash, description, uploaded_by, classification_level, status
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
         $stmt->execute([
             (int)$data['case_id'],
@@ -107,6 +137,7 @@ class Evidence {
             $data['md5_hash'] ?? null,
             $data['description'] ?? '',
             (int)$data['uploaded_by'],
+            $data['classification_level'] ?? 'confidential',
             $data['status'] ?? 'secured'
         ]);
 

@@ -93,7 +93,7 @@ try {
     $md5 = hash('md5', $sampleArtifactContent);
     $fileSize = strlen($sampleArtifactContent);
 
-    $evidStmt = $pdo->prepare("INSERT INTO `evidence` (`case_id`, `evidence_number`, `original_filename`, `stored_filename`, `file_path`, `file_size_bytes`, `mime_type`, `file_extension`, `source_device`, `acquired_at`, `sha256_hash`, `md5_hash`, `description`, `uploaded_by`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $evidStmt = $pdo->prepare("INSERT INTO `evidence` (`case_id`, `evidence_number`, `original_filename`, `stored_filename`, `file_path`, `file_size_bytes`, `mime_type`, `file_extension`, `source_device`, `acquired_at`, `sha256_hash`, `md5_hash`, `description`, `uploaded_by`, `classification_level`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $evidStmt->execute([
         $caseId,
         'EVID-2026-001-A',
@@ -109,6 +109,7 @@ try {
         $md5,
         'Network traffic capture exhibiting suspicious TLS beaconing to external IP address during incident detection.',
         $invId,
+        'secret',
         'secured'
     ]);
     $evidId = $pdo->lastInsertId();

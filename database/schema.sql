@@ -78,11 +78,13 @@ CREATE TABLE `evidence` (
     `md5_hash` CHAR(32) NULL COMMENT 'Secondary cross-check MD5 digest',
     `description` TEXT NULL,
     `uploaded_by` INT NOT NULL,
+    `classification_level` ENUM('top_secret', 'secret', 'confidential', 'restricted', 'unclassified') NOT NULL DEFAULT 'confidential' COMMENT 'Security classification clearance level',
     `status` ENUM('secured', 'in_analysis', 'tampered', 'archived') NOT NULL DEFAULT 'secured',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`case_id`) REFERENCES `cases` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     INDEX `idx_evidence_case` (`case_id`),
+    INDEX `idx_evidence_classification` (`classification_level`),
     INDEX `idx_evidence_hash` (`sha256_hash`),
     INDEX `idx_evidence_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

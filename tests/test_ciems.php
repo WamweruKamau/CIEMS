@@ -87,9 +87,10 @@ $evidenceId = Evidence::create([
     'source_device'     => 'SRV-AUTH-01 (10.0.0.15)',
     'acquired_at'       => date('Y-m-d H:i:s'),
     'sha256_hash'       => $computedSha256,
-    'description'       => 'Automated test evidence payload.',
-    'uploaded_by'       => $investigator['id'],
-    'status'            => 'secured'
+    'description'          => 'Automated test evidence payload.',
+    'uploaded_by'          => $investigator['id'],
+    'classification_level' => 'top_secret',
+    'status'               => 'secured'
 ]);
 assertTest("Evidence Artifact Ingestion", $evidenceId > 0);
 

@@ -19,7 +19,7 @@ $role = Auth::role();
         <form method="GET" action="<?= BASE_URL ?>/index.php" class="row g-2 align-items-center">
             <input type="hidden" name="action" value="evidence">
 
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="input-group">
                     <span class="input-group-text bg-light border-end-0 text-muted">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -29,7 +29,7 @@ $role = Auth::role();
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <select name="case_id" class="form-select">
                     <option value="">All Incident Cases</option>
                     <?php foreach ($cases as $c): ?>
@@ -40,7 +40,18 @@ $role = Auth::role();
                 </select>
             </div>
 
-            <div class="col-md-3 d-flex gap-2">
+            <div class="col-md-3">
+                <select name="classification" class="form-select">
+                    <option value="">All Classifications</option>
+                    <option value="top_secret" <?= ($_GET['classification'] ?? '') === 'top_secret' ? 'selected' : '' ?>>Top Secret</option>
+                    <option value="secret" <?= ($_GET['classification'] ?? '') === 'secret' ? 'selected' : '' ?>>Secret</option>
+                    <option value="confidential" <?= ($_GET['classification'] ?? '') === 'confidential' ? 'selected' : '' ?>>Confidential</option>
+                    <option value="restricted" <?= ($_GET['classification'] ?? '') === 'restricted' ? 'selected' : '' ?>>Restricted</option>
+                    <option value="unclassified" <?= ($_GET['classification'] ?? '') === 'unclassified' ? 'selected' : '' ?>>Unclassified</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 d-flex gap-2">
                 <button type="submit" class="btn btn-dark w-100">
                     <i class="fa-solid fa-filter me-1"></i> Filter
                 </button>
@@ -49,6 +60,24 @@ $role = Auth::role();
                 </a>
             </div>
         </form>
+
+        <?php if (!empty($_GET['classification']) || !empty($_GET['case_id']) || !empty($_GET['search'])): ?>
+            <div class="mt-3 pt-2 border-top d-flex flex-wrap align-items-center gap-2 small">
+                <span class="text-secondary fw-semibold"><i class="fa-solid fa-filter me-1 text-primary"></i> Active Filters:</span>
+                <?php if (!empty($_GET['classification'])): ?>
+                    <span class="d-inline-flex align-items-center gap-1">Clearance: <?= getClassificationBadge($_GET['classification']) ?></span>
+                <?php endif; ?>
+                <?php if (!empty($_GET['search'])): ?>
+                    <span class="badge bg-secondary">Search: "<?= htmlspecialchars($_GET['search']) ?>"</span>
+                <?php endif; ?>
+                <?php if (!empty($_GET['case_id'])): ?>
+                    <span class="badge bg-primary">Case Filter Active</span>
+                <?php endif; ?>
+                <a href="<?= BASE_URL ?>/index.php?action=evidence" class="text-danger ms-auto text-decoration-none fw-semibold">
+                    <i class="fa-solid fa-xmark me-1"></i> Clear all filters
+                </a>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -68,6 +97,7 @@ $role = Auth::role();
                         <tr>
                             <th class="ps-3">Evidence ID</th>
                             <th>Artifact Filename</th>
+                            <th>Clearance Level</th>
                             <th>Associated Case</th>
                             <th>Size</th>
                             <th>SHA-256 Digest</th>
@@ -87,6 +117,9 @@ $role = Auth::role();
                                 <td>
                                     <div class="fw-semibold text-dark"><?= htmlspecialchars($ev['original_filename']) ?></div>
                                     <small class="text-muted font-monospace"><?= strtoupper(htmlspecialchars($ev['file_extension'])) ?> • <?= htmlspecialchars($ev['source_device']) ?></small>
+                                </td>
+                                <td>
+                                    <?= getClassificationBadge($ev['classification_level'] ?? 'confidential') ?>
                                 </td>
                                 <td>
                                     <a href="<?= BASE_URL ?>/index.php?action=cases-show&id=<?= $ev['case_id'] ?>" class="text-decoration-none small fw-medium">

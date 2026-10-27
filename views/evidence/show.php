@@ -16,6 +16,7 @@ $role = Auth::role();
                     <a href="<?= BASE_URL ?>/index.php?action=cases-show&id=<?= $evidence['case_id'] ?>" class="badge bg-primary text-decoration-none px-3 py-2">
                         <i class="fa-solid fa-folder me-1"></i> <?= htmlspecialchars($evidence['case_number']) ?>
                     </a>
+                    <?= getClassificationBadge($evidence['classification_level'] ?? 'confidential', true) ?>
                     <?php if ($evidence['status'] === 'tampered'): ?>
                         <span class="badge bg-danger px-3 py-2 text-uppercase">
                             <i class="fa-solid fa-triangle-exclamation me-1"></i> Compromised / Tampered
@@ -110,7 +111,11 @@ $role = Auth::role();
                         <span class="text-muted">File Extension:</span>
                         <strong class="font-monospace">.<?= strtoupper(htmlspecialchars($evidence['file_extension'])) ?></strong>
                     </div>
-                    <div class="d-flex justify-content-between py-1 small">
+                    <div class="d-flex justify-content-between align-items-center py-1 border-bottom small">
+                        <span class="text-muted">Clearance Level:</span>
+                        <span><?= getClassificationBadge($evidence['classification_level'] ?? 'confidential') ?></span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1 border-bottom small">
                         <span class="text-muted">Storage Engine:</span>
                         <strong class="text-success">Secured Vault</strong>
                     </div>

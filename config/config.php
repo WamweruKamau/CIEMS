@@ -39,3 +39,63 @@ define('ALLOWED_EXTENSIONS', [
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
+
+/**
+ * Renders a high-contrast, visually prominent security clearance / classification badge.
+ */
+function getClassificationBadge(string $level = 'confidential', bool $large = false): string {
+    $map = [
+        'top_secret' => [
+            'label'  => 'TOP SECRET',
+            'bg'     => '#881337',
+            'border' => '#f43f5e',
+            'color'  => '#ffffff',
+            'icon'   => 'fa-shield-halved'
+        ],
+        'secret' => [
+            'label'  => 'SECRET',
+            'bg'     => '#c2410c',
+            'border' => '#ea580c',
+            'color'  => '#ffffff',
+            'icon'   => 'fa-lock'
+        ],
+        'confidential' => [
+            'label'  => 'CONFIDENTIAL',
+            'bg'     => '#d97706',
+            'border' => '#f59e0b',
+            'color'  => '#ffffff',
+            'icon'   => 'fa-key'
+        ],
+        'restricted' => [
+            'label'  => 'RESTRICTED',
+            'bg'     => '#1d4ed8',
+            'border' => '#3b82f6',
+            'color'  => '#ffffff',
+            'icon'   => 'fa-user-shield'
+        ],
+        'unclassified' => [
+            'label'  => 'UNCLASSIFIED',
+            'bg'     => '#475569',
+            'border' => '#64748b',
+            'color'  => '#ffffff',
+            'icon'   => 'fa-folder-open'
+        ]
+    ];
+
+    $clean = strtolower(trim($level ?: 'confidential'));
+    $info = $map[$clean] ?? $map['confidential'];
+    $pad = $large ? 'px-3 py-2' : 'px-2 py-1';
+    $fontSize = $large ? 'font-size: 0.82rem;' : 'font-size: 0.72rem;';
+
+    return sprintf(
+        '<span class="badge badge-classification-%s %s" style="background-color: %s !important; color: %s !important; border: 1px solid %s !important; font-weight: 700 !important; letter-spacing: 0.05em; %s display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.18); text-transform: uppercase;"><i class="fa-solid %s"></i> %s</span>',
+        htmlspecialchars($clean),
+        $pad,
+        $info['bg'],
+        $info['color'],
+        $info['border'],
+        $fontSize,
+        $info['icon'],
+        htmlspecialchars($info['label'])
+    );
+}
