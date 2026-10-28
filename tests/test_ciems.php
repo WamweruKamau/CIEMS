@@ -12,6 +12,10 @@ require_once dirname(__DIR__) . '/models/Evidence.php';
 require_once dirname(__DIR__) . '/models/ChainOfCustody.php';
 require_once dirname(__DIR__) . '/models/AuditLog.php';
 
+if (php_sapi_name() !== 'cli') {
+    echo "<pre style='background:#0f172a; color:#38bdf8; padding:20px; font-family:JetBrains Mono, monospace; font-size:14px; border-radius:8px; line-height:1.6;'>";
+}
+
 echo "========================================================\n";
 echo "   CIEMS AUTOMATED SYSTEM & FORENSIC INTEGRATION TEST   \n";
 echo "========================================================\n\n";
@@ -124,6 +128,10 @@ assertTest("Master Compliance Audit Trail Active", $auditCount > 0);
 echo "\n========================================================\n";
 echo "SUMMARY: $testsPassed / $totalTests Tests Passed Successfully!\n";
 echo "========================================================\n";
+
+if (php_sapi_name() !== 'cli') {
+    echo "</pre>";
+}
 
 if ($testsPassed === $totalTests) {
     exit(0);
